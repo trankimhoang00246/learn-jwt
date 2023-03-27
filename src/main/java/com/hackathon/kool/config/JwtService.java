@@ -16,8 +16,11 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
+    //Khóa bảo mật
+    //SECRET_KEY được sử dụng để tạo chữ ký cho JWT
     private static final String SECRET_KEY = "67566B5970337336763979244226452948404D6351655468576D5A7134743777";
-    //trích xuất tên đăng nhập của người dùng từ chuỗi JSON Web Token (JWT) bằng cách gọi phương thức extractClaim() đã được giải thích trước đó.
+
+    //Trích xuất tên đăng nhập của người dùng từ chuỗi JSON Web Token (JWT) bằng cách gọi phương thức extractClaim() đã được giải thích trước đó.
     public String extractUsername(String token) {
         //getSubject để lấy username trả về chuỗi == userName
         return extractClaim(token, Claims::getSubject);
@@ -40,11 +43,13 @@ public class JwtService {
                 .compact();
     }
 
+    //Kiểm tra token hợp lệ không
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
+    //Kiểm tra ngày hết hạn của token
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
